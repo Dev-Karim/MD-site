@@ -58,6 +58,15 @@
             pointer-events: none; /* Prevent hearts from blocking clicks */
         }
 
+        /* Hidden message styles */
+        .hidden-message {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #e91e63;
+            animation: fadeIn 1s ease; /* Fade-in animation */
+        }
+
         /* Explode animation */
         @keyframes explode {
             0% {
@@ -68,6 +77,12 @@
                 opacity: 0;
                 transform: translate(var(--x), var(--y)) scale(0);
             }
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Responsive styles for smaller screens */
@@ -82,6 +97,9 @@
                 font-size: 1rem; /* Smaller button text for mobile */
                 padding: 10px 20px;
             }
+            .hidden-message {
+                font-size: 1.2rem; /* Smaller message text for mobile */
+            }
         }
     </style>
 </head>
@@ -90,25 +108,31 @@
     <p>To the most amazing mom in the world,</p>
     <p>Thank you for everything you do. You are loved and appreciated more than words can express.</p>
     <p>-Karim R</p>
-
     <!-- Button to trigger the heart explosion -->
-    <button onclick="explodeHearts()">Click for a Surprise!</button>
+    <button onclick="explodeHearts(event)">Click for a Surprise!</button>
+
+    <!-- Hidden message -->
+    <p id="hiddenMessage" class="hidden-message">You are the best mom ever! ❤️</p>
 
     <script>
         // Function to create exploding hearts
-        function explodeHearts() {
+        function explodeHearts(event) {
             const numHearts = 20; // Number of hearts to create
-            const button = document.querySelector('button');
+            const button = event.target; // Get the button element
+            const rect = button.getBoundingClientRect(); // Get button position
+
+            // Calculate the click position relative to the button
+            const clickX = event.clientX - rect.left;
+            const clickY = event.clientY - rect.top;
 
             for (let i = 0; i < numHearts; i++) {
                 const heart = document.createElement('div');
                 heart.innerHTML = '❤️';
                 heart.classList.add('heart');
 
-                // Position hearts relative to the button
-                const buttonRect = button.getBoundingClientRect();
-                const buttonCenterX = buttonRect.left + buttonRect.width / 2;
-                const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+                // Position hearts at the click location
+                heart.style.left = `${event.clientX}px`;
+                heart.style.top = `${event.clientY}px`;
 
                 // Randomize position and animation
                 const angle = Math.random() * 2 * Math.PI; // Random angle
@@ -116,8 +140,6 @@
                 const x = Math.cos(angle) * distance; // X offset
                 const y = Math.sin(angle) * distance; // Y offset
 
-                heart.style.left = `${buttonCenterX}px`;
-                heart.style.top = `${buttonCenterY}px`;
                 heart.style.setProperty('--x', `${x}px`);
                 heart.style.setProperty('--y', `${y}px`);
 
@@ -133,6 +155,10 @@
                     heart.remove();
                 });
             }
+
+            // Show the hidden message
+            const message = document.getElementById('hiddenMessage');
+            message.style.display = 'block';
         }
     </script>
 </body>
