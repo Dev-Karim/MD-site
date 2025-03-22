@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Mother's Day!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #e91e63;
+            font-size: 3rem;
+        }
+        p {
+            color: #333;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            width: 200px; /* Adjust size as needed */
+            height: 200px; /* Adjust size as needed */
+        }
+        button {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #c2185b;
+        }
+        .hidden {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <h1>Happy Mother's Day! 💐</h1>
+    <p>To the most amazing mom in the world,</p>
+    <p>Thank you for everything you do. You are loved and appreciated more than words can express.</p>
+    
+    <!-- Canvas for the animated heart -->
+    <canvas id="heartCanvas"></canvas>
+
+    <br>
+    <button onclick="revealMessage()">Click for a Surprise!</button>
+    <p id="surprise" class="hidden">You are the best mom ever! ❤️</p>
+
+    <script>
+        // JavaScript for the animated heart
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 200; // Adjust size as needed
+        canvas.height = 200; // Adjust size as needed
+
+        let scale = 1; // Initial scale of the heart
+        let scaleDirection = 1; // Direction of scaling (1 for grow, -1 for shrink)
+
+        function drawHeart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2); // Move to center
+            ctx.scale(scale, scale); // Apply scaling
+
+            // Draw the heart
+            ctx.fillStyle = '#e91e63';
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-50, -50, -100, 0, 0, 80);
+            ctx.bezierCurveTo(100, 0, 50, -50, 0, 0);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function animateHeart() {
+            // Update scale for pulsing effect
+            scale += 0.01 * scaleDirection;
+            if (scale > 1.2 || scale < 0.8) {
+                scaleDirection *= -1; // Reverse direction
+            }
+
+            drawHeart();
+            requestAnimationFrame(animateHeart);
+        }
+
+        animateHeart();
+
+        // JavaScript for the surprise message
+        function revealMessage() {
+            document.getElementById('surprise').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
