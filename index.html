@@ -31,6 +31,38 @@
             margin: 10px 0; /* Add some spacing */
         }
 
+        /* Button styles */
+        button {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px; /* Add spacing above the button */
+        }
+
+        button:hover {
+            background-color: #c2185b; /* Darker color on hover */
+        }
+
+        /* Hidden message styles */
+        .hidden-message {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #e91e63;
+            animation: fadeIn 1s ease; /* Fade-in animation */
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         /* Responsive styles for smaller screens */
         @media (max-width: 600px) {
             h1 {
@@ -39,6 +71,13 @@
             p {
                 font-size: 1rem; /* Smaller font size for mobile */
             }
+            button {
+                font-size: 1rem; /* Smaller button text for mobile */
+                padding: 10px 20px;
+            }
+            .hidden-message {
+                font-size: 1.2rem; /* Smaller message text for mobile */
+            }
         }
     </style>
 </head>
@@ -46,6 +85,20 @@
     <h1>Happy Mother's Day! 💐</h1>
     <p>To the most amazing mom in the world,</p>
     <p>Thank you for everything you do. You are loved and appreciated more than words can express.</p>
-    <p>Karim R</p>
+    <p>-Karim R</p>
+
+    <!-- Button to reveal the hidden message -->
+    <button onclick="revealMessage()">Click for a Surprise!</button>
+
+    <!-- Hidden message -->
+    <p id="hiddenMessage" class="hidden-message">You are the best mom ever! ❤️</p>
+
+    <script>
+        // JavaScript to reveal the hidden message
+        function revealMessage() {
+            const message = document.getElementById('hiddenMessage');
+            message.style.display = 'block'; // Show the message
+        }
+    </script>
 </body>
 </html>
