@@ -17,6 +17,7 @@
             justify-content: center; /* Center content vertically */
             align-items: center; /* Center content horizontally */
             min-height: 100vh; /* Full viewport height */
+            overflow: hidden; /* Prevent scrolling during animation */
         }
 
         h1 {
@@ -42,25 +43,31 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 20px; /* Add spacing above the button */
+            position: relative; /* Make button the reference for hearts */
         }
 
         button:hover {
             background-color: #c2185b; /* Darker color on hover */
         }
 
-        /* Hidden message styles */
-        .hidden-message {
-            display: none; /* Initially hidden */
-            margin-top: 20px;
-            font-size: 1.5rem;
-            color: #e91e63;
-            animation: fadeIn 1s ease; /* Fade-in animation */
+        /* Heart explosion effect */
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: explode 1.5s ease-out;
+            pointer-events: none; /* Prevent hearts from blocking clicks */
         }
 
-        /* Fade-in animation */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* Explode animation */
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--x), var(--y)) scale(0);
+            }
         }
 
         /* Responsive styles for smaller screens */
@@ -75,9 +82,6 @@
                 font-size: 1rem; /* Smaller button text for mobile */
                 padding: 10px 20px;
             }
-            .hidden-message {
-                font-size: 1.2rem; /* Smaller message text for mobile */
-            }
         }
     </style>
 </head>
@@ -87,17 +91,48 @@
     <p>Thank you for everything you do. You are loved and appreciated more than words can express.</p>
     <p>-Karim R</p>
 
-    <!-- Button to reveal the hidden message -->
-    <button onclick="revealMessage()">Click for a Surprise!</button>
-
-    <!-- Hidden message -->
-    <p id="hiddenMessage" class="hidden-message">You are the best mom ever! ❤️</p>
+    <!-- Button to trigger the heart explosion -->
+    <button onclick="explodeHearts()">Click for a Surprise!</button>
 
     <script>
-        // JavaScript to reveal the hidden message
-        function revealMessage() {
-            const message = document.getElementById('hiddenMessage');
-            message.style.display = 'block'; // Show the message
+        // Function to create exploding hearts
+        function explodeHearts() {
+            const numHearts = 20; // Number of hearts to create
+            const button = document.querySelector('button');
+
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.classList.add('heart');
+
+                // Position hearts relative to the button
+                const buttonRect = button.getBoundingClientRect();
+                const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+                const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+                // Randomize position and animation
+                const angle = Math.random() * 2 * Math.PI; // Random angle
+                const distance = Math.random() * 100 + 50; // Random distance
+                const x = Math.cos(angle) * distance; // X offset
+                const y = Math.sin(angle) * distance; // Y offset
+
+                heart.style.left = `${buttonCenterX}px`;
+                heart.style.top = `${buttonCenterY}px`;
+                heart.style.setProperty('--x', `${x}px`);
+                heart.style.setProperty('--y', `${y}px`);
+
+                // Randomize size
+                const size = Math.random() * 2 + 1; // Random size between 1 and 3
+                heart.style.fontSize = `${size}rem`;
+
+                // Append the heart to the body
+                document.body.appendChild(heart);
+
+                // Remove the heart after the animation ends
+                heart.addEventListener('animationend', () => {
+                    heart.remove();
+                });
+            }
         }
     </script>
 </body>
